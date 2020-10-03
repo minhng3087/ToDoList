@@ -2,18 +2,16 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // Define collection and schema for Business
-let Persons = new Schema({
+let Items = new Schema({
     name: {
         type: String
     },
-    company: {
-        type: String
-    },
-    age: {
+    level: {
         type: Number
-    }
+    },
+
 }, {
-    collection: 'persons'
+    collection: 'items'
 });
 
-module.exports = mongoose.model('Persons', Persons);
+module.exports = mongoose.model('Items', Items);
