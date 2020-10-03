@@ -16,9 +16,9 @@ class Item extends Component {
     render() {
         return (
             <tr>
-                <td className="text-center">{this.props.obj.name}</td>
-                <td>{this.props.obj.company}</td>
-                <td className="text-center">{this.props.obj.age}</td>
+                <td className="text-center">{this.props.index + 1}</td>
+                <td>{this.props.obj.name}</td>
+                <td className="text-center">{this.setElementLevel(this.props.obj.level)}</td>
                 <td>
                 <button 
                     type="button" 
@@ -33,6 +33,15 @@ class Item extends Component {
                 </td>
             </tr>
         );
+    }
+    setElementLevel(level) {
+        let elementLevel = <span className="label label-info">Small</span>;
+        if (level ===1 ) {
+            elementLevel = <span className="label label-info">Medium</span>;
+        }else if (level === 2) {
+            elementLevel = <span className="label label-danger">High</span>;
+        }
+        return elementLevel;
     }
 }
 

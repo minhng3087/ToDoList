@@ -5,7 +5,7 @@ export default class List extends Component {
 
     tabRow() {
         return this.props.items.map(function (e, i) {
-            return <Item obj={e} key={i}/>;
+            return <Item obj={e} key={i} index={i} />;
         });
     }
 
