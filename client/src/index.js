@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-
+import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
+// import StudyForm from './components/StudyForm';
+import registerServiceWorker from './registerServiceWorker';
+
 
 ReactDOM.render(
-    <BrowserRouter>
-        <App />
-    </BrowserRouter>, document.getElementById('root'));
+	<App />,
+	document.getElementById('main-content'));
 
-serviceWorker.unregister();
+
+registerServiceWorker();

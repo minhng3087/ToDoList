@@ -1,47 +1,49 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
 
 class Item extends Component {
     constructor(props) {
         super(props);
-        this.delete = this.delete.bind(this);
+
+        this.state = {
+           
+        };
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
     }
-    delete() {
-        axios.get('http://localhost:4000/persons/delete/'+this.props.obj._id)
-            .then(console.log('Deleted'))
-            .catch(err => console.log(err))
+    
+    handleEdit(item){
+       this.props.onClickEdit(item);
+    }
+
+    handleDelete(id){
+        this.props.onClickDelete(id);
     }
 
     render() {
+        const {item} = this.props;
+        const {index} = this.props;
+
         return (
             <tr>
-                <td className="text-center">{this.props.index + 1}</td>
-                <td>{this.props.obj.name}</td>
-                <td className="text-center">{this.setElementLevel(this.props.obj.level)}</td>
+                <td className="text-center">{index + 1}</td>
+                <td>{item.name}</td>
+                <td className="text-center">{this.showElementLevel(item.level)}</td>
                 <td>
-                <button 
-                    type="button" 
-                    className="btn btn-warning">
-                    Edit
-                </button>
-                <button 
-                    type="button" 
-                    className="btn btn-danger">
-                    Delete
-                </button>
-                </td>
+                    <button onClick={()=>this.handleEdit(item)}  type="button" className="btn btn-warning">Edit</button>
+                    <button onClick={()=>this.handleDelete(item._id)} type="button" className="btn btn-danger">Delete</button>
+                </td>   
             </tr>
         );
     }
-    setElementLevel(level) {
-        let elementLevel = <span className="label label-info">Small</span>;
-        if (level ===1 ) {
-            elementLevel = <span className="label label-info">Medium</span>;
-        }else if (level === 2) {
-            elementLevel = <span className="label label-danger">High</span>;
+
+    showElementLevel(level){
+        let elmLevel = <span className="label label-default">Small</span>;
+        if(level === 1){
+            elmLevel = <span className="label label-info">Medium</span>;
+        }else if(level === 2){
+            elmLevel = <span className="label label-danger">High</span>;
         }
-        return elementLevel;
+        return elmLevel;
     }
 }
 
