@@ -22,17 +22,16 @@ class App extends Component {
         super(props);
 
       
-        this.closeForm          = this.closeForm.bind(this);
-        this.handleSearh        = this.handleSearh.bind(this);
+        this.closeForm = this.closeForm.bind(this);
+        this.handleSearh = this.handleSearh.bind(this);
       
-        this.handleDelete         = this.handleDelete.bind(this);   
-        this.handleSubmit         = this.handleSubmit.bind(this);  
-        this.handleEdit         = this.handleEdit.bind(this);  
+        this.handleDelete = this.handleDelete.bind(this);   
+        this.handleSubmit = this.handleSubmit.bind(this);  
+        this.handleEdit = this.handleEdit.bind(this);  
+        this.renderItems = this.renderItems.bind(this);
     }
 
-    
-
-    componentDidMount() {
+    renderItems() {
         axios.get('http://localhost:4000/items')
             .then(response => {
                 console.log(response.data);
@@ -41,6 +40,12 @@ class App extends Component {
             .catch(function (error) {
                 console.log(error);
             })
+    }
+
+    
+
+    componentDidMount() {
+        this.renderItems();
     }
 
     handleSubmit(item){
@@ -72,8 +77,7 @@ class App extends Component {
             .then(console.log('Deleted'))
             .catch(err => console.log(err))
             
-            
-
+        this.renderItems();
     
     }
 
