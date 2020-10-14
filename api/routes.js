@@ -38,12 +38,12 @@ itemRoutes.route('/edit/:id').get(function (req, res) {
 
 //  Defined update route
 itemRoutes.route('/update/:id').put(function (req, res) {
-    Item.updateOne ({_id: req.params.id}, req.body)
-        .then(() => console.log("Update success!!!"))
+   Item.updateOne({_id: req.params.id}, req.body)
+    .then(() => res.json('Successfully'));
 });
 
 // Defined delete | remove | destroy route
-itemRoutes.route('/delete/:id').get(function (req, res) {
+itemRoutes.route('/delete/:id').delete(function (req, res) {
     Item.findByIdAndDelete({_id: req.params.id}, function(err){
         if(err) res.json(err);
         else res.json('Successfully removed');

@@ -1,22 +1,17 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-
-
 class Form extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            // task_id: '',
             task_name: '',
             task_level: 0
         };
-
         this.handleCancel = this.handleCancel.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        // this.updateItem = this.updateItem.bind(this);
     }
+
 
     componentWillMount(){
         this.updateItem(this.props.itemSelected)
@@ -29,7 +24,7 @@ class Form extends Component {
     updateItem(item){
         if(item !== null) {
             this.setState({
-                // task_id: item.id,
+                task_id: item._id,
                 task_name: item.name,
                 task_level: item.level,
             });
@@ -49,14 +44,14 @@ class Form extends Component {
 
     handleSubmit(event) {
         let item = {
+            id: this.state.task_id,
             name: this.state.task_name,
-            // id: this.state.task_id,
             level: this.state.task_level,
         };
-
+     
         this.props.onClickSubmit(item);
-        axios.post('http://localhost:4000/items/create', item)
-            .then(res => console.log(res.data))
+       
+        
         event.preventDefault();
     }
 

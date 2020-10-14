@@ -15,6 +15,7 @@ class Control extends Component {
         // props.onClickSearchGo
     }
 
+
     handleAdd(){
         this.props.onClickAdd();
     }

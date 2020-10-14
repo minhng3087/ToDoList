@@ -4,9 +4,9 @@ import Control from './components/Control';
 import Form from './components/Form';
 import List from './components/List';
 import {filter, includes, orderBy as funcOrderBy,} from 'lodash';
-import axios from 'axios';
+import ItemService from './ItemService';
 
-// const uuidv4 = require('uuid/v4');
+
 
 class App extends Component {
     state = {
@@ -15,7 +15,9 @@ class App extends Component {
         strSearch   : '',
         orderBy     : 'name',
         orderDir    : 'asc',
-        itemSelected: null
+        itemSelected: null,
+    
+
     };
         
     constructor(props) {
@@ -28,11 +30,14 @@ class App extends Component {
         this.handleDelete = this.handleDelete.bind(this);   
         this.handleSubmit = this.handleSubmit.bind(this);  
         this.handleEdit = this.handleEdit.bind(this);  
-        this.renderItems = this.renderItems.bind(this);
+       
     }
 
-    renderItems() {
-        axios.get('http://localhost:4000/items')
+
+    
+
+    componentDidMount() {
+        ItemService.getItems()
             .then(response => {
                 console.log(response.data);
                 this.setState({items: response.data});
@@ -42,42 +47,68 @@ class App extends Component {
             })
     }
 
-    
-
-    componentDidMount() {
-        this.renderItems();
-    }
 
     handleSubmit(item){
-        let {items} = this.state;
-        
+        console.log(item.id);
+        if (item.id === undefined) {
+            this.setState({
+                id: '',
+                name: item.name,
+                level: +item.level,
+            });
+                ItemService.createItem(item).then(res => {
+                    let items = this.state.items;
+                    items = [item,...items];
+                    this.setState({ 
+                        items: items,
+                        isShowForm: false 
+                    });
+                })
+            .catch(error => console.log(error));
+        }
+        else {
+            ItemService.updateItem(item, item.id)
+                .then(res => {
+                    let key = item.id;
+                    this.setState(
+                        prevState => ({
+                        items: prevState.items.map(
+                            elm => elm._id === key? {
+                            ...elm,
+                            name: item.name,
+                            level: +item.level,
+                            }: elm
+                        ),
+                        isShowForm: false
+                    })
+                    );
+                })
+                .catch(error => console.log(error));
+        }
+      
+       };
 
-        items.push({
-
-            name    : item.name,
-            level   : +item.level
-        })
-
-        this.setState({
-            items: items,
-            isShowForm: false
-        });
-
-    }
 
     handleEdit(item){
-        this.setState({
-            itemSelected: item,
-            isShowForm: true
+
+        ItemService.getItemById(item._id).then( res => {
+            this.setState({
+                itemSelected: res.data,
+                isShowForm: true
+            });
         });
+       
+        
     }
 
-    handleDelete(id){
-        axios.get('http://localhost:4000/items/delete/'+id)
-            .then(console.log('Deleted'))
-            .catch(err => console.log(err))
-            
-        this.renderItems();
+    handleDelete(item){
+        ItemService.deleteItem(item._id)
+            .then(res => {
+                this.setState(prevState => ({
+                    items: prevState.items.filter(el => el._id !== item._id )
+                }));
+            })
+          .catch(error => console.log(error));
     
     }
 
@@ -123,40 +154,47 @@ class App extends Component {
 
         if(isShowForm) {
             elmForm = <Form 
-                itemSelected={itemSelected} 
+                itemSelected={itemSelected}
                 onClickSubmit={this.handleSubmit} 
                 onClickCancel={this.closeForm}
             />;
         }
 
         return (
-            <div>
-                {/* TITLE : START */}
-                <Title />
-                {/* TITLE : END */}
+                  <div>
+                    {/* TITLE : START */}
+                    <Title />
+                    {/* TITLE : END */}
 
-                {/* CONTROL (SEARCH + SORT + ADD) : START */}
-                <Control 
-                    orderBy={orderBy}
-                    orderDir={orderDir}
-                    onClickSearchGo={this.handleSearh}
-                    onClickSort={this.handleSort}
-                    onClickAdd={this.handleToggleForm} 
-                    isShowForm={isShowForm}
-                />
-                {/* CONTROL (SEARCH + SORT + ADD) : END */}
+                    {/* CONTROL (SEARCH + SORT + ADD) : START */}
+                    <Control 
+                        orderBy={orderBy}
+                        orderDir={orderDir}
+                        onClickSearchGo={this.handleSearh}
+                        onClickSort={this.handleSort}
+                        onClickAdd={this.handleToggleForm} 
+                        isShowForm={isShowForm}
+                    />
+                    {/* CONTROL (SEARCH + SORT + ADD) : END */}
 
-                {/* FORM : START */}
-                { elmForm }
-                {/* FORM : END */}
+                    {/* FORM : START */}
+                    { elmForm }
+                    {/* FORM : END */}
 
-                {/* LIST : START */}
-                <List 
-                    onClickEdit={this.handleEdit}
-                    onClickDelete={this.handleDelete}
-                    items={items} />
-                {/* LIST : END */}
+                    {/* LIST : START */}
+                    <List 
+                        onClickEdit={this.handleEdit}
+                        onClickDelete={this.handleDelete}
+                        items={items} />
+                    {/* LIST : END */}
+                    
+                        
+                 
+                        
+                
             </div>
+            
+
         );
     }
 }
