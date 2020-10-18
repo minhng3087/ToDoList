@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import { Grid, IconButton, TableCell, TableRow } from '@material-ui/core';
+
 
 class Item extends Component {
     constructor(props) {
@@ -18,21 +22,22 @@ class Item extends Component {
     handleDelete(item){
         this.props.onClickDelete(item);
     }
-
+    
     render() {
         const {item} = this.props;
         const {index} = this.props;
-
         return (
-            <tr>
-                <td className="text-center">{index + 1}</td>
-                <td>{item.name}</td>
-                <td className="text-center">{this.showElementLevel(item.level)}</td>
-                <td>
-                    <button onClick={()=>this.handleEdit(item)}  type="button" className="btn btn-warning">Edit</button>
-                    <button onClick={()=>this.handleDelete(item)} type="button" className="btn btn-danger">Delete</button>
-                </td>   
-            </tr>
+            <TableRow>
+                <TableCell align="center">{index + 1}</TableCell>
+                <TableCell>{item.name}</TableCell>
+                <TableCell align="center">{this.showElementLevel(item.level)}</TableCell>
+                <TableCell align="center">
+                    <Grid container>
+                        <Grid item xs={6} md={6}><IconButton color="primary"  onClick={()=>this.handleEdit(item)} aria-label="edit" ><EditIcon/></IconButton></Grid>
+                        <Grid item xs={6} md={6}><IconButton color="secondary"  onClick={()=>this.handleDelete(item)} aria-label="delete"><DeleteIcon/></IconButton></Grid>
+                    </Grid>
+                </TableCell>   
+            </TableRow>
         );
     }
 

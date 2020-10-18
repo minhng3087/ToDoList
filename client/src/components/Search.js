@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-
+import {TextField, InputAdornment} from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 class Search extends Component {
     constructor(props) {
         super(props);
@@ -7,21 +8,18 @@ class Search extends Component {
         this.state = {
             strSearch: ''
         };
-
-        this.handleSearch = this.handleSearch.bind(this);
-        this.handleClear = this.handleClear.bind(this);
         this.handleChange = this.handleChange.bind(this);
-
-        // props.onClickGo
     }
 
-    handleSearch(){
+    handleSearch = (e) => {
+        if (e.key === 'Enter') {
+            this.props.onClickGo(this.state.strSearch);
+        }
+
+    }
+
+    handleSearch2 = () => {
         this.props.onClickGo(this.state.strSearch);
-    }
-
-    handleClear(){
-        this.setState({strSearch: ''});
-        this.props.onClickGo('');
     }
 
     handleChange(event){
@@ -29,16 +27,20 @@ class Search extends Component {
     }
 
     render() {
+        console.log(this.state.strSearch);
         return (
-            <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                <div className="input-group">
-                    <input value={this.state.strSearch} onChange={this.handleChange} type="text" className="form-control" placeholder="Search for..." />
-                    <span className="input-group-btn">
-                        <button onClick={this.handleSearch} className="btn btn-info" type="button">Go!</button>
-                        <button onClick={this.handleClear} className="btn btn-warning" type="button">Clear</button>
-                    </span>
-                </div>
-            </div>
+                <TextField 
+                    InputProps={{
+                        startAdornment: (
+                        <InputAdornment position="start">
+                            <SearchIcon/>
+                        </InputAdornment>
+                        ),
+                    }}
+                    onChange={this.handleChange}
+                    onKeyPress={this.handleSearch}
+                    style={{width: '40%'}} id="outlined-search" label="Search task" type="search" variant="outlined" 
+                />
         );
     }
 }

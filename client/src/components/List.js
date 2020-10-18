@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import Item from './Item';
+import {Table, TableBody, TableCell, TableHead, TableRow, } from '@material-ui/core';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import '../css/table.css'
 
 class List extends Component {
+    showIcon(columnToSort) {
+        return columnToSort === this.props.columnToSort ? (this.props.sortDirection === "asc" ? (<ArrowDropDownIcon/>) : (<ArrowDropUpIcon/>)) : null
+    }
 
     render() {
         const items   = this.props.items;
@@ -17,20 +24,39 @@ class List extends Component {
         });
 
         return (
-            <div className="panel panel-success">
-                <div className="panel-heading">List Task</div>
-                <table className="table table-hover ">
-                    <thead>
-                        <tr>
-                            <th style={{width: '10%'}} className="text-center">#</th>
-                            <th>Task</th>
-                            <th style={{width: '20%'}} className="text-center">Level</th>
-                            <th style={{width: '20%'}}>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>{elmItem}</tbody>
-                </table>
-            </div>
+                <Table>
+                    <TableHead >
+                        <TableRow>
+                            <TableCell align="center" style={{width: '10%'}}>#</TableCell>
+                            <TableCell>
+                                <div 
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center"
+                                    }} 
+                                    onClick={()=> this.props.handleSort('name')}>
+                                    Task
+                                    {this.showIcon('name')}
+                                </div>
+                            </TableCell>
+                            <TableCell style={{width: '20%'}}>
+                                <div onClick={()=> this.props.handleSort('level')}
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center"
+                                    }}>
+                                    Level
+                                    {this.showIcon('level')}
+                                </div>
+                            </TableCell>
+                            <TableCell style={{width: '12%'}} align="center">Action</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {elmItem}
+                    </TableBody>
+                </Table>
         );
     }
 }

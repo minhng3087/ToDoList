@@ -1,18 +1,11 @@
 import React, { Component } from 'react';
 import Search from './Search';
-import Sort from './Sort';
+import { Grid } from '@material-ui/core';
 
 class Control extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-           
-        };
-
         this.handleAdd = this.handleAdd.bind(this);
-
-        // props.onClickSearchGo
     }
 
 
@@ -21,7 +14,6 @@ class Control extends Component {
     }
 
     render() {
-        let {orderBy, orderDir}     = this.props;
 
         let elmButton = <button onClick={this.handleAdd} type="button" className="btn btn-info btn-block">Add Task</button>;
         if(this.props.isShowForm === true) {
@@ -29,26 +21,12 @@ class Control extends Component {
         }
 
         return (
-            <div className="row">
-
-                {/* SEARCH : START */}
+            <Grid container direction="row">
                 <Search onClickGo={this.props.onClickSearchGo}/>
-                {/* SEARCH : END */}
-
-                {/* SORT : START */}
-                <Sort 
-                    onClickSort={this.props.onClickSort}
-                    orderBy={orderBy}
-                    orderDir={orderDir}
-                />
-                {/* SORT : END */}
-
-                {/* ADD : START */}
-                <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <Grid item xs={5} sm={5} md={5}>
                     { elmButton }
-                </div>
-                {/* ADD : END */}
-            </div>
+                </Grid>
+            </Grid>
         );
     }
 }
