@@ -1,0 +1,6 @@
+.MuiTable-root {margin-top: 50px;}
+.MuiTableHead-root th {font-weight: 600;color: #333996;background-color: #3c44b126;cursor: pointer;}
+.MuiTableHead-root th:hover{color: #141617;}
+.MuiTableBody-root td {font-weight: 300;}
+.MuiTableBody-root tr:hover {background-color: #fffbf2;}
+
