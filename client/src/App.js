@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Title from './components/Title';
-import Control from './components/Control';
-import Form from './components/Form';
+import Search from './components/Search';
+import Add from './components/Add';
 import List from './components/List';
 import {filter, includes, orderBy as funcOrderBy} from 'lodash';
 import ItemService from './ItemService';
-import { Container } from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 
 const invertDirection = {
     asc: "desc",
@@ -14,7 +14,6 @@ const invertDirection = {
 class App extends Component {
     state = {
         items       : [],
-        isShowForm  : false,
         strSearch   : '',
         columnToSort    : '',
         sortDirection    : 'desc',
@@ -25,11 +24,7 @@ class App extends Component {
         
     constructor(props) {
         super(props);
-
-      
-        this.closeForm = this.closeForm.bind(this);
         this.handleSearh = this.handleSearh.bind(this);
-      
         this.handleDelete = this.handleDelete.bind(this);   
         this.handleSubmit = this.handleSubmit.bind(this);  
         this.handleEdit = this.handleEdit.bind(this);  
@@ -62,8 +57,7 @@ class App extends Component {
                     let items = this.state.items;
                     items = [item,...items];
                     this.setState({ 
-                        items: items,
-                        isShowForm: false 
+                        items: items, 
                     });
                 })
             .catch(error => console.log(error));
@@ -81,7 +75,6 @@ class App extends Component {
                             level: +item.level,
                             }: elm
                         ),
-                        isShowForm: false
                     })
                     );
                 })
@@ -96,7 +89,6 @@ class App extends Component {
         ItemService.getItemById(item._id).then( res => {
             this.setState({
                 itemSelected: res.data,
-                isShowForm: true
             });
         });
        
@@ -125,7 +117,6 @@ class App extends Component {
 
     handleToggleForm = () => {
         this.setState({
-            isShowForm: !this.state.isShowForm,
             itemSelected: null
         });
     }
@@ -136,17 +127,11 @@ class App extends Component {
         });
     }
 
-    closeForm(){
-        this.setState({
-            isShowForm: false
-        });
-    }
 
     render() {
-        let elmForm     = null;
         let itemsOrigin = (this.state.items !== null) ? [...this.state.items] : [];
         let items       = [];
-        let { isShowForm, strSearch, itemSelected, columnToSort, sortDirection}     = this.state;
+        let {strSearch, itemSelected, columnToSort, sortDirection}     = this.state;
        
         // Search
         items = filter(itemsOrigin, (item) => {
@@ -156,32 +141,31 @@ class App extends Component {
         // Sort
         items = funcOrderBy(items, [columnToSort], [sortDirection]);  
 
-        if(isShowForm) {
-            elmForm = <Form 
-                itemSelected={itemSelected}
-                onClickSubmit={this.handleSubmit} 
-                onClickCancel={this.closeForm}
-            />;
-        }
-
         return (
             <Container fixed>
                 <Title />
-                <Control 
-                    onClickSearchGo={this.handleSearh}
-                    onClickAdd={this.handleToggleForm} 
-                    isShowForm={isShowForm}
-                />
-                    { elmForm }
+                <Grid container spacing={6} direction="row">
+                    <Grid item xs={4} md={4}>
+                        <Search 
+                            onClickSearch={this.handleSearh}
+                        />
+                    </Grid>
+                    <Grid item xs={8} md={8}>
+                        <Add 
+                            itemSelected={itemSelected}
+                            onClickSubmit={this.handleSubmit} 
+                        />
+                    </Grid>
+                </Grid>
 
-                    <List 
+                <List 
                     columnToSort={columnToSort}
                     sortDirection={sortDirection}
                     handleSort={this.handleSort}
                     onClickEdit={this.handleEdit}
                     onClickDelete={this.handleDelete}
                     items={items} 
-                    />
+                />
             </Container>
             
 

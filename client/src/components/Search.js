@@ -13,13 +13,9 @@ class Search extends Component {
 
     handleSearch = (e) => {
         if (e.key === 'Enter') {
-            this.props.onClickGo(this.state.strSearch);
+            this.props.onClickSearch(this.state.strSearch);
         }
 
-    }
-
-    handleSearch2 = () => {
-        this.props.onClickGo(this.state.strSearch);
     }
 
     handleChange(event){
@@ -27,7 +23,6 @@ class Search extends Component {
     }
 
     render() {
-        console.log(this.state.strSearch);
         return (
                 <TextField 
                     InputProps={{
@@ -39,8 +34,13 @@ class Search extends Component {
                     }}
                     onChange={this.handleChange}
                     onKeyPress={this.handleSearch}
-                    style={{width: '40%'}} id="outlined-search" label="Search task" type="search" variant="outlined" 
+                    id="outlined-search" 
+                    fullWidth
+                    label="Search task" 
+                    type="search" 
+                    variant="outlined" 
                 />
+         
         );
     }
 }
